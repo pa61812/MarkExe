@@ -110,8 +110,14 @@ namespace MarksExec.Services
                     reader.Close();
                 }
 
-                Common.WriteLog("新增DB");
-                result = InsertToSql(stms);
+                Common.WriteLog("刪除DB");
+                result = DeleteTable();
+
+                if (result)
+                {
+                    Common.WriteLog("新增DB");
+                    result = InsertToSql(stms);
+                }
 
                 Common.WriteLog(finame + "切割完成，一共 " + i + " 筆");
 
@@ -205,6 +211,48 @@ namespace MarksExec.Services
                     return result;
                 }
             }
+        }
+
+        //進DB前先刪除
+        public static bool DeleteTable()
+        {
+
+            bool result = true;
+            string strsql = "TRUNCATE TABLE STM_TMP ";
+
+            string connectionStrings = ConfigurationManager.ConnectionStrings["Sasc4ConnectionString"].ConnectionString;
+
+            SqlConnection conn = new SqlConnection(connectionStrings);
+
+            using (conn)
+            {
+                conn.Open();
+                //加上BeginTrans
+                using (var transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        conn.Execute(strsql, transaction);
+                        //正確就Commit
+                        transaction.Commit();
+                        conn.Close();
+
+                        Common.WriteLog("刪除成功");
+                        return result;
+
+                    }
+                    catch (Exception e)
+                    {
+                        transaction.Rollback();
+                        Common.WriteLog("刪除失敗");
+                        Common.WriteLog(e.ToString());
+                        conn.Close();
+                        result = false;
+                        return result;
+                    }
+                }
+            }
+
         }
     }
 }

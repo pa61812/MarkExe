@@ -1,0 +1,11 @@
+MarksExec.exe BARCODE
+MarksExec.exe BIGSALES
+MarksExec.exe DAILYSALES
+MarksExec.exe DAILYSTOCK
+MarksExec.exe ITMGEL
+MarksExec.exe ITMSUB
+MarksExec.exe ITMSUPGEXCRTNC
+MarksExec.exe STM
+MarksExec.exe SUPATT
+
+

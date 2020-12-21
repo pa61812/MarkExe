@@ -87,7 +87,7 @@ namespace MarksExec
 
         }
 
-
+        //AppConfig所有的KEY
         public static List<string> GetAppSetting()
         {
             List<string> result = new List<string>();

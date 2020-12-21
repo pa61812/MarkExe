@@ -1,13 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "47OhCZ+GC7IVvKlokuvgefqKw8FQShL+j425OBae1pJ5TqWEwREo3e/9N5e1r1ZXIxu7Qbxd9v+lTfu31dUmEQ==",
+  "dgSpecHash": "Shb4ljT3CC07WkZKa5QHGxw23oipBMxDZE8KKcWDOSRxFtHUOi/jZxJyZMFXzp9bhf+xBDIYMZ0uYJGfMbJqmA==",
   "success": true,
-  "projectFilePath": "D:\\BankPro\\Carrefour\\MarksExec\\MarksExec\\MarksExec.csproj",
+  "projectFilePath": "D:\\BankPro\\Carrefour\\MarkExe\\MarksExec\\MarksExec\\MarksExec.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pa618\\.nuget\\packages\\dapper\\2.0.78\\dapper.2.0.78.nupkg.sha512",
+    "C:\\Users\\pa618\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\pa618\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\pa618\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "C:\\Users\\pa618\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\pa618\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\pa618\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
     "C:\\Users\\pa618\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\pa618\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
@@ -24,7 +26,8 @@
     "C:\\Users\\pa618\\.nuget\\packages\\system.security.permissions\\5.0.0\\system.security.permissions.5.0.0.nupkg.sha512",
     "C:\\Users\\pa618\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512",
     "C:\\Users\\pa618\\.nuget\\packages\\system.text.encoding.codepages\\5.0.0\\system.text.encoding.codepages.5.0.0.nupkg.sha512",
-    "C:\\Users\\pa618\\.nuget\\packages\\system.windows.extensions\\5.0.0\\system.windows.extensions.5.0.0.nupkg.sha512"
+    "C:\\Users\\pa618\\.nuget\\packages\\system.windows.extensions\\5.0.0\\system.windows.extensions.5.0.0.nupkg.sha512",
+    "C:\\Users\\pa618\\.nuget\\packages\\z.dapper.plus\\3.0.29\\z.dapper.plus.3.0.29.nupkg.sha512"
   ],
   "logs": []
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\BankPro\\Carrefour\\MarksExec\\MarksExec\\MarksExec.csproj": {}
+    "D:\\BankPro\\Carrefour\\MarkExe\\MarksExec\\MarksExec\\MarksExec.csproj": {}
   },
   "projects": {
-    "D:\\BankPro\\Carrefour\\MarksExec\\MarksExec\\MarksExec.csproj": {
+    "D:\\BankPro\\Carrefour\\MarkExe\\MarksExec\\MarksExec\\MarksExec.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\BankPro\\Carrefour\\MarksExec\\MarksExec\\MarksExec.csproj",
+        "projectUniqueName": "D:\\BankPro\\Carrefour\\MarkExe\\MarksExec\\MarksExec\\MarksExec.csproj",
         "projectName": "MarksExec",
-        "projectPath": "D:\\BankPro\\Carrefour\\MarksExec\\MarksExec\\MarksExec.csproj",
+        "projectPath": "D:\\BankPro\\Carrefour\\MarkExe\\MarksExec\\MarksExec\\MarksExec.csproj",
         "packagesPath": "C:\\Users\\pa618\\.nuget\\packages\\",
-        "outputPath": "D:\\BankPro\\Carrefour\\MarksExec\\MarksExec\\obj\\",
+        "outputPath": "D:\\BankPro\\Carrefour\\MarkExe\\MarksExec\\MarksExec\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pa618\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -60,6 +60,10 @@
             "System.Text.Encoding.CodePages": {
               "target": "Package",
               "version": "[5.0.0, )"
+            },
+            "Z.Dapper.Plus": {
+              "target": "Package",
+              "version": "[3.0.29, )"
             }
           },
           "imports": [

@@ -76,14 +76,51 @@ namespace MarksExec
             }
         }
 
+
+        //Out路徑
+        public static string OutLocation()
+        {
+            //寫檔目錄
+            string filelocation = ConfigurationManager.AppSettings["FileLocation"];
+            string now = DateTime.Now.ToString("yyyyMMdd");
+            filelocation = Path.Combine(filelocation, now);
+            Common.CreateLocation(filelocation, "");
+            //分類
+            string[] dirs = Directory.GetDirectories(filelocation);
+
+
+            filelocation = Path.Combine(filelocation, (dirs.Length + 1).ToString());
+            Common.CreateLocation(filelocation, "");
+
+            //決定目錄
+            filelocation = Common.CheckLocation(filelocation);
+            return filelocation;
+        }
+
+        //抓最後一個字
+        public static string GetLastCode(string _str)
+        {
+            _str = _str.Substring(_str.Length - 1, 1);
+            return _str;
+        }
+
+
+        //抓檔名
+        public static string GetNameCode(string _str)
+        {
+            _str = _str.Substring(0, _str.Length - 4);
+            return _str;
+        }
+
         #endregion
 
-        #region 壓縮檔及寫檔
+        #region 壓縮檔處理
         /// <summary>
         ///解壓GZ縮檔
         /// </summary>
         /// <param name="GzPath">要解壓的檔案</param>
-        /// <param name="Outfile">解壓後的路徑</param>
+        /// <param name="outpath">解壓的路徑</param>
+        /// <param name="Outfile">解壓後完整路徑</param>
         public static bool UnGZToFile(string GzPath,string outpath, string Outfile)
         {
             
@@ -122,10 +159,10 @@ namespace MarksExec
                             break;
                     }
 
-                if (File.Exists(GzPath))
-                {
-                    File.Delete(GzPath);
-                }
+                //if (File.Exists(GzPath))
+                //{
+                //    File.Delete(GzPath);
+                //}
                 return result;
             }
             catch (Exception ex)
@@ -143,83 +180,6 @@ namespace MarksExec
 
 
         }
-
-        //將已匯入檔案寫成UTF8
-        //public static string WriteUTF8File(string filepath, string filename)
-        //{
-        //    //寫檔目錄
-        //    string filelocation = filepath;
-        //    string now = DateTime.Now.ToString("yyyyMMdd");
-        //    filelocation = Path.Combine(filelocation, now);
-        //    CreateLocation(filelocation, "");
-        //    string[] dirs = Directory.GetDirectories(filelocation);
-        //    filelocation = Path.Combine(filelocation, (dirs.Length + 1).ToString());
-
-        //    CreateLocation(filelocation,"");
-        //    string path = Path.Combine(filelocation, filename);
-        //    //刪除已匯入檔案
-        //    if (File.Exists(filepath))
-        //    {
-        //        File.Delete(filepath);
-        //    }
-        //    CreateLocation(filelocation, path);
-        //    filepath = Path.Combine(filepath, filename);
-        //    try
-        //    {
-
-        //        byte[] ansiBytes = File.ReadAllBytes(filepath);
-        //        var utf8String = Encoding.Default.GetString(ansiBytes);
-        //        File.WriteAllText(path, utf8String);
-
-
-
-
-        //        WriteLog("轉成成功");
-        //        return path;
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        WriteLog(ex.ToString());
-        //        return path;
-        //    }
-        //}
-
-        //將已匯入檔案寫至FileLocation
-        /// <summary>
-        /// 將檔案搬至OUT
-        /// </summary>
-        /// <param name="filepath">要搬檔檔案</param>
-        /// <param name="outpath">搬檔後路徑</param>
-        /// <param name="filename">檔名</param>
-        public static void WriteFile(string filepath,string outpath, string filename)
-        {
-           
-            string path = Path.Combine(outpath, filename);
-            
-            CreateLocation(outpath, path);
-
-            try
-            {
-
-                byte[] ansiBytes = File.ReadAllBytes(filepath);
-                var utf8String = Encoding.GetEncoding(0).GetString(ansiBytes);
-                File.WriteAllText(path, utf8String, Encoding.UTF8);
-
-                //刪除已匯入檔案
-                if (File.Exists(filepath))
-                {
-                    File.Delete(filepath);
-                }
-                WriteLog("移至FileLocation成功");
-            }
-            catch (Exception ex)
-            {
-                WriteLog(ex.ToString());
-
-            }
-        }
-
         /// <summary>
         ///解壓ZIP縮檔
         /// </summary>
@@ -238,15 +198,15 @@ namespace MarksExec
                 }
                 //解壓縮
                 ZipFile.ExtractToDirectory(filepath, outpath);
-                File.Delete(filepath);
+                //File.Delete(filepath);
                 return result; 
             }
             catch (Exception ex)
             {
-                if (File.Exists(outpath))
-                {
-                    File.Delete(outpath);
-                }
+                //if (File.Exists(outpath))
+                //{
+                //    File.Delete(outpath);
+                //}
                 WriteLog(ex.ToString());
                 result = false;
                 return result;
@@ -254,6 +214,46 @@ namespace MarksExec
             }
           
           
+        }
+
+      
+        #endregion
+
+        #region 移檔刪檔
+        //將已匯入檔案寫至FileLocation
+        /// <summary>
+        /// 將檔案搬至OUT
+        /// </summary>
+        /// <param name="filepath">要搬檔檔案</param>
+        /// <param name="outpath">搬檔後路徑</param>
+        /// <param name="filename">檔名</param>
+        public static bool MoveFile(string filepath, string outpath, string filename)
+        {
+            bool result = true;
+            string path = Path.Combine(outpath, filename);
+
+            CreateLocation(outpath, path);
+
+            try
+            {
+
+                File.Move(filepath, path,true);
+
+                //刪除已匯入檔案
+                if (File.Exists(filepath))
+                {
+                    File.Delete(filepath);
+                }
+                WriteLog("移至FileLocation成功");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                WriteLog("移至FileLocation失敗");
+                WriteLog(ex.ToString());
+                return result;
+            }
         }
 
         //刪除資料夾
@@ -284,10 +284,36 @@ namespace MarksExec
                 WriteLog(ex.ToString());
                 throw;
             }
-          
+
 
         }
+        //public static void WriteFile(string filepath, string outpath, string filename)
+        //{
 
+        //    string path = Path.Combine(outpath, filename);
+
+        //    CreateLocation(outpath, path);
+
+        //    try
+        //    {
+
+        //        byte[] ansiBytes = File.ReadAllBytes(filepath);
+        //        var utf8String = Encoding.GetEncoding(0).GetString(ansiBytes);
+        //        File.WriteAllText(path, utf8String, Encoding.UTF8);
+
+        //        //刪除已匯入檔案
+        //        if (File.Exists(filepath))
+        //        {
+        //            File.Delete(filepath);
+        //        }
+        //        WriteLog("移至FileLocation成功");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        WriteLog(ex.ToString());
+
+        //    }
+        //}
         #endregion
 
 

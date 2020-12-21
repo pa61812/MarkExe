@@ -19,6 +19,7 @@
     <PackageReference Include="System.Data.OleDb" Version="5.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+    <PackageReference Include="Z.Dapper.Plus" Version="3.0.29" />
   </ItemGroup>
 
 </Project>

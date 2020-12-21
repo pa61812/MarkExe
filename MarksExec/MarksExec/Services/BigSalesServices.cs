@@ -9,11 +9,45 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Data.OleDb;
+using Z.Dapper.Plus;
 
 namespace MarksExec.Services
 {
     class BigSalesServices
     {
+        //抓指定路徑的符合檔名的檔案
+        /// <summary>
+        ///抓指定路徑的符合檔名的檔案
+        /// </summary>
+        /// <param name="path">指定路徑</param>
+        /// <param name="OutToPath">匯出路徑</param>
+        public static void GetFile(string path, string OutToPath)
+        {
+            //找檔案
+            DirectoryInfo di = new DirectoryInfo(path);
+            bool Issuccess;
+            int i = 0;
+            string now = DateTime.Now.ToString("yyyyMMdd");
+
+            foreach (var item in di.GetFiles())
+            {
+                i++;
+                //檔案名稱
+                string filename = item.Name;
+                //檔案路徑
+                string filepath = item.FullName;
+               
+                if (filename.Contains("BigSales"))
+                {
+                    Issuccess=StartInsert(filepath, filename);
+                    if (Issuccess)
+                    {
+                        File.Move(filepath, Path.Combine(OutToPath, filename), true);
+                    }
+            
+                }
+            }
+        }
         //開始新增
         public static bool StartInsert(string path, string finame)
         {
@@ -82,42 +116,29 @@ namespace MarksExec.Services
             string connectionStrings = ConfigurationManager.ConnectionStrings["Sasc4ConnectionString"].ConnectionString;
 
             SqlConnection conn = new SqlConnection(connectionStrings);
-
+          
             using (conn)
             {
                 conn.Open();
-                //加上BeginTrans
-                using (var transaction = conn.BeginTransaction())
-                {
+             
                     try
                     {
-                        string strsql = "Insert into  BigSales_TMP " +
-                              "values(@YYYYMM,@Business_Date,@StoreName,"
-                             +"@FullCode,@Item_Sales_Qty_Unit,@Item_Sales_Amount,"
-                             +"@ItemCName,@Input)";
-
-                        conn.Execute(strsql, bigSales, transaction);
-
-
-                        //正確就Commit
-                        transaction.Commit();
+                        DapperPlusManager.Entity<BigSales>().Table("BigSales_TMP");
+                        conn.BulkInsert(bigSales);
                         conn.Close();
-
                         Common.WriteLog("新增成功");
                         return result;
                     }
                     catch (Exception e)
                     {
-                        transaction.Rollback();
+                      
                         Common.WriteLog("新增失敗");
                         Common.WriteLog(e.ToString());
                         conn.Close();
                         result = false;
                         return result;
-                    }
-                }
+                    }              
             }
-
 
         }
 

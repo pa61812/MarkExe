@@ -7,11 +7,67 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Z.Dapper.Plus;
 
 namespace MarksExec.Services
 {
     class DailySalesServices
     {
+        //抓指定路徑的符合檔名的檔案
+        /// <summary>
+        ///抓指定路徑的符合檔名的檔案
+        /// </summary>
+        /// <param name="path">指定路徑</param>
+        /// <param name="OutToPath">匯出路徑</param>
+        public static void GetFile(string path, string OutToPath)
+        {
+            //找檔案
+            DirectoryInfo di = new DirectoryInfo(path);
+            bool Issuccess;
+            int i = 0;
+            string now = DateTime.Now.ToString("yyyyMMdd");
+
+            foreach (var item in di.GetFiles())
+            {
+                i++;
+                //檔案名稱
+                string filename = item.Name;
+                //檔案路徑
+                string filepath = item.FullName;
+                //解壓路徑
+                string outpath = "";
+                string finame = Common.GetNameCode(filename);
+
+                if (finame.Length == 12 && Common.GetLastCode(finame) == "L")
+                {
+                    if (Path.GetExtension(filename).Contains("zip"))
+                    {
+                        outpath = Path.Combine(path, now + "L");
+                        Common.CreateLocation(outpath, "");
+                        //解壓縮
+                        Issuccess = Common.UnZipToFile(filepath, outpath);
+                        if (Issuccess)
+                        {                      
+                            Issuccess = StartInsert(Path.Combine(outpath, finame), finame);
+                        }
+                        if (Issuccess)
+                        {
+                            //移至FileLocation
+                            Common.WriteLog("移至FileLocation");
+                            Issuccess=Common.MoveFile(filepath, OutToPath, filename);
+                        }
+                        if (Issuccess)
+                        {
+                            Common.DeleteFolder(outpath);
+                        }
+                       continue;
+                    }
+
+                   StartInsert(filepath, filename);
+                   continue;
+                }
+            }
+        }
         public static bool StartInsert(string path, string finame)
         {
             bool result = true;
@@ -60,7 +116,7 @@ namespace MarksExec.Services
 
 
 
-                Console.WriteLine("新增 " + finame + " 成功，一共 " + i + " 筆");
+                Common.WriteLog("新增 " + finame + " 成功，一共 " + i + " 筆");
 
                
                 return result;
@@ -111,7 +167,7 @@ namespace MarksExec.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("切割字串 " + line + " 失敗");
+                
                 Common.WriteLog("切割字串 " + line + " 失敗");
 
                 Common.WriteLog(ex.ToString());
@@ -130,40 +186,27 @@ namespace MarksExec.Services
             string connectionStrings = ConfigurationManager.ConnectionStrings["Sasc4ConnectionString"].ConnectionString;
 
             SqlConnection conn = new SqlConnection(connectionStrings);
-
+         
             using (conn)
             {
                 conn.Open();
-                //加上BeginTrans
-                using (var transaction = conn.BeginTransaction())
+
+                try
                 {
-                    try
-                    {
-                        string strsql = "Insert into  DailySales_TMP " +
-                               "values(@StoreCode,@DepartmentCode,@ItemCode,@SubCode,@SalesDate,@UnitCode,@StatusPromotion"
-                               + ",@SPType,@VatRate,@SalesQty,@SalesAmount,@SalesPrice,@PurchasePrice,@Rebate,@VatAmount,@OriginalSellingPrice,@CSTAmount)";
+                    DapperPlusManager.Entity<DailySales>().Table("DailySales_TMP");
+                    conn.BulkInsert(sasc4);
+                    conn.Close();
+                    Common.WriteLog("新增成功");
+                    return result;
+                }
+                catch (Exception e)
+                {
 
-
-                        conn.Execute(strsql, sasc4, transaction);
-
-
-                        //正確就Commit
-                        transaction.Commit();
-                        conn.Close();
-                        Common.WriteLog("新增成功");
-                       
-                        return result;
-                    }
-                    catch (Exception e)
-                    {
-                        transaction.Rollback();
-                        conn.Close();
-                        Console.WriteLine("新增失敗");
-                        Common.WriteLog("新增失敗");
-                        Common.WriteLog(e.ToString());
-                        result = false;
-                        return result;
-                    }
+                    Common.WriteLog("新增失敗");
+                    Common.WriteLog(e.ToString());
+                    conn.Close();
+                    result = false;
+                    return result;
                 }
             }
         }

@@ -27,7 +27,14 @@ namespace MarksExec.Services
             bool Issuccess;
             int i = 0;
             string now = DateTime.Now.ToString("yyyyMMdd");
+            //刪除DB，成功在進行Insert
+            Common.WriteLog("刪除DB");
+            Issuccess = DeleteTable();
 
+            if (!Issuccess)
+            {
+                return;
+            }
             foreach (var item in di.GetFiles())
             {
                 i++;
@@ -112,14 +119,10 @@ namespace MarksExec.Services
 
                     reader.Close();
                 }
-                Common.WriteLog("刪除DB");
-                result = DeleteTable();
-
-                if (result)
-                {
-                    Common.WriteLog("新增DB");
-                    result = InsertToSql(iTMSUPs);
-                }
+               
+                 Common.WriteLog("新增DB");
+                 result = InsertToSql(iTMSUPs);
+                
 
                
 
@@ -272,7 +275,7 @@ namespace MarksExec.Services
         {
 
             bool result = true;
-            string strsql = "TRUNCATE TABLE ITMSUPGEXCRTNC_TMP ";
+            string strsql = "delete from ITMSUPGEXCRTNC_TMP ";
 
             string connectionStrings = ConfigurationManager.ConnectionStrings["Sasc4ConnectionString"].ConnectionString;
 
@@ -281,14 +284,11 @@ namespace MarksExec.Services
             using (conn)
             {
                 conn.Open();
-                //加上BeginTrans
-                using (var transaction = conn.BeginTransaction())
-                {
+             
                     try
                     {
-                        conn.Execute(strsql, transaction);
-                        //正確就Commit
-                        transaction.Commit();
+                        SqlCommand cmd = new SqlCommand(strsql, conn);
+                        cmd.ExecuteNonQuery();
                         conn.Close();
 
                         Common.WriteLog("刪除成功");
@@ -297,14 +297,14 @@ namespace MarksExec.Services
                     }
                     catch (Exception e)
                     {
-                        transaction.Rollback();
+                        
                         Common.WriteLog("刪除失敗");
                         Common.WriteLog(e.ToString());
                         conn.Close();
                         result = false;
                         return result;
                     }
-                }
+                
             }
 
         }

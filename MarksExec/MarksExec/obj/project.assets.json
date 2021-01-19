@@ -1220,7 +1220,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "D:\\BankPro\\OK離倉刷WebAPI\\Nuget\\nuget packages": {},
+        "D:\\BankPro\\OKPdaWebAPI\\Nuget\\nuget packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

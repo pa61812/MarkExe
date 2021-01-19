@@ -74,6 +74,12 @@ namespace MarksExec
                 case "SUPATT":
                     SUPATTServices.GetFile(filemaster, OutToPath);
                     break;
+                case "DSL":
+                    DSLServices.GetFile(@"D:\BankPro\Carrefour\20210112\DSL_ACC_20201110", OutToPath);
+                    break;
+                case "EMP_DATA":
+                    EmpDataServices.GetFile(filemaster, OutToPath);
+                    break;
 
             }
 

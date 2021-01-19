@@ -4,11 +4,6 @@ using System.Text;
 
 namespace MarksExec.Model
 {
-    public static class InsertModel
-    { 
-
-    }
-
     public class ITEMGEL
     {
         public string Dept     { get; set; }
@@ -336,4 +331,99 @@ namespace MarksExec.Model
         public string Input { get; set; }
 
     }
+
+
+    public class DSLDailySales
+    {
+        public string StoreCode { get; set; }
+
+        public string DepartmentCode { get; set; }
+
+        public string ItemCode { get; set; }
+
+        public string SubCode { get; set; }
+
+        public string SalesDate { get; set; }
+
+        public string UnitCode { get; set; }
+
+        public string StatusPromotion { get; set; }
+
+        public string SPType { get; set; }
+
+        public string VatRate { get; set; }
+
+        public string SalesQty { get; set; }
+
+        public string SalesAmount { get; set; }
+
+        public string SalesPrice { get; set; }
+
+        public string PurchasePrice { get; set; }
+
+        public string Rebate { get; set; }
+
+        public string VatAmount { get; set; }
+        public string Input { get; set; }
+        public string StoreName { get; set; }
+
+        public string OriginalSellingPrice { get; set; }
+
+
+        public string CSTAmount { get; set; }
+
+
+    }
+
+    public class SearchStoreCode
+    {
+        public string Store { get; set; }
+
+        public string StoreCode { get; set; }
+    }
+
+
+    public class EMP_DATA
+    {
+        public string Emp_No { get; set; }
+        public string Login_Name { get; set; }
+        public string Emp_Name { get; set; }
+        public string Mail_External { get; set; }
+        public string Mail_Internal { get; set; }
+        public string Entry_Date { get; set; }
+        public string Dept_Code { get; set; }
+        public string Org_code { get; set; }
+        public string Org_NAME { get; set; }
+        public string Job_Desc_Eng { get; set; }
+        public string Job_Desc_Cht { get; set; }
+        public string Direct_Manager { get; set; }
+        public string Region { get; set; }
+        public string REGION_NAME { get; set; }
+        public string TW_sTORE_ID { get; set; }
+        public string TW_sTORE_Name { get; set; }
+        public string bu { get; set; }
+        public string bu_NAME { get; set; }
+        public string Job_code { get; set; }
+        public string bank_no { get; set; }
+        public string on_job  {get; set;}
+        public string NIGHT_SHIFT { get; set; }
+        public string SPEC_TYPE { get; set; }
+        public string JOB_TITLE { get; set; }
+        public string FT_PT { get; set; }
+        public string JOB_LEVEL { get; set; }
+        public string STORE_ID { get; set; }
+        public string DEPT_ID { get; set; }
+        public string MOD_TIME { get; set; }
+        public string MOD_USER { get; set; }
+        public string MOD_PGM { get; set; }
+        public string MOD_WS { get; set; }
+        public string STORE_NAME_E { get; set; }
+        public string STORE_NAME_C { get; set; }
+        public string ID_NO { get; set; }
+        public string OUT_DATE { get; set; }
+        public string SEX { get; set; }
+        public string Birthday { get; set; }
+
+    }
+
 }

@@ -274,9 +274,12 @@ namespace MarksExec
                         File.Delete(di);//直接删除其中的文件   
                     }
                     else
+                    {
                         DeleteFolder(di);//删除子資料夹夾  
+                    }
+                       
                 }
-                Directory.Delete(dir);//删除已空文件夾  
+                //Directory.Delete(dir);//删除已空文件夾  
             }
             catch (Exception ex)
             {

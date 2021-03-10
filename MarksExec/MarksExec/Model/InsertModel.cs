@@ -4,6 +4,12 @@ using System.Text;
 
 namespace MarksExec.Model
 {
+    public class Sample
+    {
+        public string SampleID { get; set; }
+
+        public string SampleText { get; set; }
+    }
     public class ITEMGEL
     {
         public string Dept     { get; set; }
@@ -365,8 +371,7 @@ namespace MarksExec.Model
 
         public string VatAmount { get; set; }
         public string Input { get; set; }
-        public string StoreName { get; set; }
-
+        
         public string OriginalSellingPrice { get; set; }
 
 
@@ -425,5 +430,164 @@ namespace MarksExec.Model
         public string Birthday { get; set; }
 
     }
+
+    public class DMList_HIS
+    {
+        public string Year { get; set; }
+        public string NewDMCode { get; set; }
+        public string NewDMScheduleDMFrom { get; set; }
+        public string NewDMScheduleDMTo { get; set; }
+        public string Festival { get; set; }
+        public string DM_Code { get; set; }
+        public string Divison { get; set; }
+        public string FullCode { get; set; }
+        public string Dept { get; set; }
+        public string NationalTGNo { get; set; }
+        public string Dpno_Key { get; set; }
+        public string ItemCode { get; set; }
+        public string SubCode { get; set; }
+        public string UnitCode { get; set; }
+        public string TGFrom { get; set; }
+        public string TGTo { get; set; }
+        public string PPP1 { get; set; }
+        public string PPP1_from { get; set; }
+        public string PPP1_to { get; set; }
+        public string PPP2 { get; set; }
+        public string PurchasePeriodFrom { get; set; }
+        public string PurchasePeriodTo { get; set; }
+        public string NormalSellingPrice { get; set; }
+        public string PSP_from { get; set; }
+        public string PSP_to { get; set; }
+        public string DC { get; set; }
+        public string Remark { get; set; }
+        public string CDes { get; set; }
+        public string EDes { get; set; }
+        public string QtyBox { get; set; }
+        public string CName { get; set; }
+        public string EName { get; set; }
+        public string Capacity { get; set; }
+        public string MainSupplier { get; set; }
+        public string RealSupplier { get; set; }
+        public string SupCName { get; set; }
+        public string SupEName { get; set; }
+        public string Media { get; set; }
+        public string TGEName { get; set; }
+        public string ForecastQty { get; set; }
+        public string Big { get; set; }
+        public string DM_Page { get; set; }
+        public string sf_ranking { get; set; }
+        public string Hyper_store_G1 { get; set; }
+        public string Super_store_G1 { get; set; }
+        public string Store_G1_mapping { get; set; }
+        public string Hyper_store_G2 { get; set; }
+        public string Super_store_G2 { get; set; }
+        public string Store_G2_mapping { get; set; }
+        public string Hyper_store_G3 { get; set; }
+        public string Super_store_G3 { get; set; }
+        public string Store_G3_mapping { get; set; }
+        public string Limitation { get; set; }
+        public string LimitationQty { get; set; }
+        public string MainUnitCode { get; set; }
+        public string Loyalty { get; set; }
+        public string LoyaltyPrice { get; set; }
+        public string ExtraPoints { get; set; }
+        public string Priority { get; set; }
+        public string ForecastSales { get; set; }
+        public string CategoryManager { get; set; }
+        public string MD_Push { get; set; }
+        public string NOcode { get; set; }
+        public string PCD { get; set; }
+        public string MajorBarcode { get; set; }
+        public string normal_selling_price { get; set; }
+        public string promo_selling_price { get; set; }
+        public string DM_Activities_remark { get; set; }
+        public string Promotion_Effect_Type { get; set; }
+
+
+    }
+
+    public class ECSales
+    {
+        public string Store { get; set; }
+        public string StoreCName { get; set; }
+        public string StoreZIP { get; set; }
+        public string OrderDate { get; set; }
+        public string OrderNo { get; set; }
+        public string Media { get; set; }
+        public string DeliveryDate { get; set; }
+        public string InvoiceDate { get; set; }
+        public string InvoiceDate_Actual { get; set; }
+        public string DeliveryBy { get; set; }
+        public string OrderStatus { get; set; }
+        public string LogisticStatus { get; set; }
+        public string ZIPCode1 { get; set; }
+        public string County { get; set; }
+        public string District { get; set; }
+        public string Address { get; set; }
+        public string PaymentBy { get; set; }
+        public string PaymentStatus { get; set; }
+        public string OrderAmt { get; set; }
+        public string FullCode { get; set; }
+        public string Unit { get; set; }
+        public string Input { get; set; }
+        public string ItemCName { get; set; }
+        public string SalesQty { get; set; }
+        public string SalesPrice { get; set; }
+        public string SalesQtyUnit { get; set; }
+        public string SalesAmt { get; set; }
+
+    }
+
+
+    public class ECSalesSupply
+    {
+        public string OrderId { get; set; }
+        public string OrderNo { get; set; }
+        public string DeliveryDate { get; set; }
+        public string DeliveryTime { get; set; }
+        public string StoreCode { get; set; }
+        public string OutStore { get; set; }
+        public string InputStore { get; set; }
+        public string OrderType { get; set; }
+        public string Media { get; set; }
+        public string DeliveryBy { get; set; }
+        public string OrderStatus { get; set; }
+        public string LogisticStatus { get; set; }
+        public string MemberEmail { get; set; }
+        public string Consignee { get; set; }
+        public string ConsigneeTel { get; set; }
+        public string ConsigneePhone { get; set; }
+        public string ZipCode { get; set; }
+        public string OrderCounty { get; set; }
+        public string OrderArea { get; set; }
+        public string DeliveryAddress { get; set; }
+        public string OrderRemarks { get; set; }
+        public string OrderDate { get; set; }
+        public string PaymentBy { get; set; }
+        public string PaymentStatus { get; set; }
+        public string OrderAmt { get; set; }
+        public string ItemFullCode { get; set; }
+        public string ItemMainCode { get; set; }
+        public string ItemCName { get; set; }
+        public string SalesQty { get; set; }
+        public string SalesPrice { get; set; }
+        public string ISGiveAway { get; set; }
+        public string AddOn { get; set; }
+        public string LangCulture { get; set; }
+        public string OrderAttributes { get; set; }
+        public string StoreOrdertype { get; set; }
+        public string OrderPrice { get; set; }
+        public string Temperature { get; set; }
+        public string IsMember { get; set; }
+        public string MemberAccount { get; set; }
+        public string CardNo { get; set; }
+        public string DiscountCode { get; set; }
+        public string DiscountType { get; set; }
+        public string InvoiceDate { get; set; }
+        public string PromotionActivityID { get; set; }
+        public string ActivityID { get; set; }
+        public string CompnayOrderNo { get; set; }
+    }
+  
 
 }

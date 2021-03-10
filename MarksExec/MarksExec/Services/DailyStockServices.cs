@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Z.Dapper.Plus;
+
 
 namespace MarksExec.Services
 {
@@ -52,7 +52,7 @@ namespace MarksExec.Services
                     if (Path.GetExtension(filename).Contains("zip"))
                     {
                         outpath = Path.Combine(path, now + "A");
-                        Common.CreateLocation(outpath, "");
+                        //Common.CreateLocation(outpath, "");
                         //解壓縮
                         Issuccess = Common.UnZipToFile(filepath, outpath);
                         if (Issuccess)
@@ -227,8 +227,16 @@ namespace MarksExec.Services
 
                 try
                 {
-                    DapperPlusManager.Entity<DailyStock>().Table("DailyStock_TMP");
-                    conn.BulkInsert(sasc4);
+                    var dtdailyStock = Common.ConvertToDataTable<DailyStock>(sasc4);
+
+
+                    var bulkCopy = new SqlBulkCopy(conn)
+                    {
+                        DestinationTableName = "[dbo].[DailyStock_TMP]",
+                        BatchSize = 1000
+                    };
+                    bulkCopy.WriteToServer(dtdailyStock);
+                    bulkCopy.Close();
                     conn.Close();
                     Common.WriteLog("新增成功");
                     return result;
@@ -250,7 +258,7 @@ namespace MarksExec.Services
         {
 
             bool result = true;
-            string strsql = "delete from DailyStock_TMP ";
+            string strsql = "truncate table DailyStock_TMP ";
 
             string connectionStrings = ConfigurationManager.ConnectionStrings["Sasc4ConnectionString"].ConnectionString;
 

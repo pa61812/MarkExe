@@ -80,7 +80,18 @@ namespace MarksExec
                 case "EMP_DATA":
                     EmpDataServices.GetFile(filemaster, OutToPath);
                     break;
-
+                case "DMLIST":
+                    DMList_HISServices.GetFile(filemaster, OutToPath);
+                    break;
+                case "EC_DETAIL":
+                    EC_DetailServices.GetFile(filemaster, OutToPath);
+                    break;
+                case "STOCKOUT":
+                    StockOutServices.GetFile(filemaster, OutToPath);
+                    break;
+                case "EC_DETAILSUPPLY":
+                    ECSalesSupplyServices.GetFile(filemaster, OutToPath);
+                    break;
             }
 
 

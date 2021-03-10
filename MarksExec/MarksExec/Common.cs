@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
+using System.Data;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -112,6 +114,32 @@ namespace MarksExec
             return _str;
         }
 
+
+        //List轉成DATATABLE
+        public static DataTable ConvertToDataTable<T>(IList<T> data)
+        {
+            PropertyDescriptorCollection properties =
+               TypeDescriptor.GetProperties(typeof(T));
+            DataTable table = new DataTable();
+            foreach (PropertyDescriptor prop in properties)
+            {
+                //新增datatable的藍為名稱跟型態
+                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+            }
+      
+            foreach (T item in data)
+            {
+                DataRow row = table.NewRow();
+                foreach (PropertyDescriptor prop in properties)
+                {
+                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+                }          
+                table.Rows.Add(row);
+            }
+            return table;
+
+        }
+
         #endregion
 
         #region 壓縮檔處理
@@ -196,6 +224,7 @@ namespace MarksExec
                 {
                     DeleteFolder(outpath);
                 }
+                CreateLocation(outpath,"");
                 //解壓縮
                 ZipFile.ExtractToDirectory(filepath, outpath);
                 //File.Delete(filepath);
@@ -279,7 +308,7 @@ namespace MarksExec
                     }
                        
                 }
-                //Directory.Delete(dir);//删除已空文件夾  
+                Directory.Delete(dir);//删除已空文件夾  
             }
             catch (Exception ex)
             {

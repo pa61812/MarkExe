@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Z.Dapper.Plus;
+
 
 namespace MarksExec.Services
 {
@@ -200,8 +200,16 @@ namespace MarksExec.Services
 
                 try
                 {
-                    DapperPlusManager.Entity<STM_TMP>().Table("STM_TMP");
-                    conn.BulkInsert(stm);
+                    var dtstm = Common.ConvertToDataTable<STM_TMP>(stm);
+
+
+                    var bulkCopy = new SqlBulkCopy(conn)
+                    {
+                        DestinationTableName = "[dbo].[STM_TMP]",
+                        BatchSize = 1000
+                    };
+                    bulkCopy.WriteToServer(dtstm);
+                    bulkCopy.Close();
                     conn.Close();
                     Common.WriteLog("新增成功");
                     return result;
@@ -223,7 +231,7 @@ namespace MarksExec.Services
         {
 
             bool result = true;
-            string strsql = "delete from STM_TMP ";
+            string strsql = "truncate table STM_TMP ";
 
             string connectionStrings = ConfigurationManager.ConnectionStrings["Sasc4ConnectionString"].ConnectionString;
 

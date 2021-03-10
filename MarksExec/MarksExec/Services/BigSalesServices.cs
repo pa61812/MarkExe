@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Data.OleDb;
-using Z.Dapper.Plus;
+
 
 namespace MarksExec.Services
 {
@@ -31,7 +31,8 @@ namespace MarksExec.Services
 
             //刪除DB，成功在進行Insert
             Common.WriteLog("刪除DB");
-            Issuccess = DeleteTable();
+            //Issuccess = DeleteTable();
+            Issuccess = true;
 
             if (!Issuccess)
             {
@@ -61,23 +62,23 @@ namespace MarksExec.Services
         public static bool StartInsert(string path, string finame)
         {
             bool result = true;
-            string sql = "select * from C6_BigSales";
+            string sql = "select * from C6_BigSales_2020";
             try
             {
                 Common.WriteLog("開始讀取 " + finame);
                 DataTable dt = GetOleDbDataTable(path, sql);
 
-                var bigSales=  DataTableToList(dt);
+                //var bigSales=  DataTableToList(dt);
 
                
 
                
                 Common.WriteLog("新增DB");
-                result = InsertToSql(bigSales);
+                result = InsertToSql(dt);
                 
           
 
-                Common.WriteLog(finame + "讀取完成，一共 " + bigSales.Count + " 筆");
+                Common.WriteLog(finame + "讀取完成，一共 " + dt.Rows.Count + " 筆");
                 return result;
             }
             catch (Exception e)
@@ -124,7 +125,7 @@ namespace MarksExec.Services
 
 
         //進DB
-        private static bool InsertToSql(List<BigSales> bigSales)
+        private static bool InsertToSql(DataTable bigSales)
         {
             bool result = true;
 
@@ -139,8 +140,13 @@ namespace MarksExec.Services
              
                     try
                     {
-                        DapperPlusManager.Entity<BigSales>().Table("BigSales_TMP");
-                        conn.BulkInsert(bigSales);
+                        var bulkCopy = new SqlBulkCopy(conn)
+                        {
+                          DestinationTableName = "[dbo].[BigSales_TMP]",
+                          BatchSize = 1000
+                        };
+                        bulkCopy.WriteToServer(bigSales);
+                        bulkCopy.Close();                  
                         conn.Close();
                         Common.WriteLog("新增成功");
                         return result;
@@ -162,7 +168,7 @@ namespace MarksExec.Services
         {
 
             bool result = true;
-            string strsql = "delete from BigSales_TMP ";
+            string strsql = "truncate table BigSales_TMP ";
 
             string connectionStrings = ConfigurationManager.ConnectionStrings["Sasc4ConnectionString"].ConnectionString;
 
@@ -195,7 +201,7 @@ namespace MarksExec.Services
         }
 
 
-
+        /*
         public static List<BigSales> DataTableToList(DataTable dt)
         {
             List<BigSales> bigSales = new List<BigSales>();
@@ -214,5 +220,6 @@ namespace MarksExec.Services
             }
             return bigSales;
         }
+        */
     }
 }

@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Z.Dapper.Plus;
+
 
 namespace MarksExec.Services
 {
@@ -95,6 +95,15 @@ namespace MarksExec.Services
                     if (daily.DepartmentCode != null)
                     {
                         sales.Add(daily);
+                        if (i % 100000 == 0)
+                        {
+                            result = InsertToSql(sales);
+                            sales = new List<DSLDailySales>();
+                            if (!result)
+                            {
+                                return false;
+                            }
+                        }
                     }
                    
                     //Read the next line
@@ -143,12 +152,13 @@ namespace MarksExec.Services
                 line = new Regex("[\\s]+").Replace(line, " ");
                 //空白切割
                 string[] words = line.Split('|'); 
+                //string[] words = Split2(line + "|", "|").ToArray();
 
-                storecode=searchstore.Where(x => x.Store == words[0]).Select(x=>x.StoreCode).FirstOrDefault();
-                if (Array.IndexOf(itemcode, words[2]) < 0 || Array.IndexOf(dept, words[1]) < 0)
-                {
-                    return dailSales;
-                }
+                storecode =searchstore.Where(x => x.Store == words[0]).Select(x=>x.StoreCode).FirstOrDefault();
+                //if (Array.IndexOf(itemcode, words[2]) < 0 || Array.IndexOf(dept, words[1]) < 0)
+                //{
+                //    return dailSales;
+                //}
 
                 dailSales = new DSLDailySales
                 {
@@ -169,8 +179,7 @@ namespace MarksExec.Services
                     VatAmount = words[14],
                     Input= words[15],
                     OriginalSellingPrice = "0",
-                    CSTAmount = "0",
-                    StoreName="0" 
+                    CSTAmount = "0"                    
                 };
                 return dailSales;
             }
@@ -185,6 +194,22 @@ namespace MarksExec.Services
 
 
 
+        }
+
+        public static IEnumerable<string> Split2(IEnumerable<char> source, string splitStr)
+        {
+            var enumerator = source.GetEnumerator();
+            string line = string.Empty;
+            while (enumerator.MoveNext())
+            {
+                line += (char)enumerator.Current;
+                if (line.EndsWith(splitStr))
+                {
+                    yield return line.Substring(0, line.Length - splitStr.Length);
+                    //Console.WriteLine(line);
+                    line = string.Empty;
+                }
+            }
         }
 
         private static bool InsertToSql(List<DSLDailySales> sasc4)
@@ -202,8 +227,16 @@ namespace MarksExec.Services
 
                 try
                 {
-                    DapperPlusManager.Entity<DSLDailySales>().Table("DailySales");
-                    conn.BulkInsert(sasc4);
+                    var dtdailySales = Common.ConvertToDataTable<DSLDailySales>(sasc4);
+
+
+                    var bulkCopy = new SqlBulkCopy(conn)
+                    {
+                        DestinationTableName = "[dbo].[DailySales_TMP]",
+                        BatchSize = 1000
+                    };
+                    bulkCopy.WriteToServer(dtdailySales);
+                    bulkCopy.Close();
                     conn.Close();
                     Common.WriteLog("新增成功");
                     return result;
@@ -225,7 +258,7 @@ namespace MarksExec.Services
         {
             List<SearchStoreCode> result = new List<SearchStoreCode>();
 
-            string strMsgSelect = "select*  from Store ";
+            string strMsgSelect = "select store, storecode  from StoreTmp ";
 
             string connectionStrings = ConfigurationManager.ConnectionStrings["Sasc4ConnectionString"].ConnectionString;
 

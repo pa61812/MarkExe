@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Z.Dapper.Plus;
+
 
 namespace MarksExec.Services
 {
@@ -224,7 +224,7 @@ namespace MarksExec.Services
         }
 
         //進DB
-        private static bool InsertToSql(List<EMP_DATA> bars)
+        private static bool InsertToSql(List<EMP_DATA> empdata)
         {
             bool result = true;
 
@@ -238,8 +238,16 @@ namespace MarksExec.Services
                 conn.Open();
                 try
                 {
-                    DapperPlusManager.Entity<EMP_DATA>().Table("EMP_DATA_TMP");
-                    conn.BulkInsert(bars);
+                    var dtempdata = Common.ConvertToDataTable<EMP_DATA>(empdata);
+
+
+                    var bulkCopy = new SqlBulkCopy(conn)
+                    {
+                        DestinationTableName = "[dbo].[EMP_DATA_TMP]",
+                        BatchSize = 1000
+                    };
+                    bulkCopy.WriteToServer(dtempdata);
+                    bulkCopy.Close();
                     conn.Close();
                     Common.WriteLog("新增成功");
                     return result;
@@ -262,7 +270,7 @@ namespace MarksExec.Services
         {
 
             bool result = true;
-            string strsql = "delete from EMP_DATA_TMP ";
+            string strsql = "truncate table EMP_DATA_TMP ";
 
             string connectionStrings = ConfigurationManager.ConnectionStrings["Sasc4ConnectionString"].ConnectionString;
 

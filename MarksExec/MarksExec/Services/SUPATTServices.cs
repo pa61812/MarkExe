@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Z.Dapper.Plus;
+
 
 namespace MarksExec.Services
 {
@@ -197,8 +197,16 @@ namespace MarksExec.Services
 
                 try
                 {
-                    DapperPlusManager.Entity<SUPATT>().Table("SUPATT_TMP");
-                    conn.BulkInsert(Sup);
+                    var dtSup = Common.ConvertToDataTable<SUPATT>(Sup);
+
+
+                    var bulkCopy = new SqlBulkCopy(conn)
+                    {
+                        DestinationTableName = "[dbo].[SUPATT_TMP]",
+                        BatchSize = 1000
+                    };
+                    bulkCopy.WriteToServer(dtSup);
+                    bulkCopy.Close();
                     conn.Close();
                     Common.WriteLog("新增成功");
                     return result;
